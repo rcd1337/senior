@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.Python
+
+# Testes (pytest / coverage) — o desafio pede testes no backend
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Ambiente local — venv não entra no git; deps estão no requirements.txt
+.env
+.venv/
+venv/
+env/
+
+# Django / DRF
+*.log
+db.sqlite3
+*.sqlite3
+media/          # uploads locais (fotos de hóspede etc., se tiver)
+staticfiles/    # saída do collectstatic, não o código em static/
+
+# Node / React (Vite gera dist/; Next geraria .next/)
+node_modules/
+dist/
+build/
+.next/
+*.local
+npm-debug.log*
+
+# Docker
+*.pid
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
