@@ -94,3 +94,22 @@ class SeedDemoTestCase(APITestCase):
                 {"login": login, "password": "123"},
             )
             self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class SchemaAPITestCase(APITestCase):
+    def test_schema_is_public(self):
+        response = self.client.get(reverse("schema"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("/api/v1/auth/token/", response.data["paths"])
+
+    def test_docs_are_public(self):
+        response = self.client.get(reverse("swagger-ui"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_write_schema_omits_auto_timestamps(self):
+        response = self.client.get(reverse("schema"))
+        guest_request = response.data["components"]["schemas"]["GuestRequest"]
+        self.assertEqual(set(guest_request["required"]), {"name", "document", "phone"})
+        self.assertNotIn("created_at", guest_request["properties"])
+        self.assertNotIn("updated_at", guest_request["properties"])
+        self.assertIn("created_at", response.data["components"]["schemas"]["Guest"]["properties"])

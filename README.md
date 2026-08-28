@@ -9,6 +9,7 @@ Django + DRF + PostgreSQL e React (Vite). Recepção: hóspedes, reservas, check
 - PostgreSQL 16
 - Docker
 - JWT
+- OpenAPI (Swagger)
 - Node.js, npm e React 19 (Vite)
 
 ## Pré-requisitos
@@ -38,7 +39,16 @@ Sobe o Postgres e a API em background, espera o migrate/seed, instala o front se
 docker compose -f backend/docker-compose.yml down
 ```
 
-Browser: [http://localhost:3000](http://localhost:3000) — `atendente` / `123`.
+Browser: [http://localhost:3000](http://localhost:3000) — `atendente` / `123`. Swagger: [http://localhost:8000/api/docs/](http://localhost:8000/api/docs/).
+
+### Resetar dados
+
+Apaga o volume do Postgres, sobe de novo e o entrypoint aplica migrate + seed.
+
+```bash
+chmod +x reset.sh
+./reset.sh
+```
 
 ### Opção 2 - manual (2 terminais, back e front)
 
@@ -55,7 +65,7 @@ Browser: [http://localhost:3000](http://localhost:3000) — `atendente` / `123`.
    docker compose up --build
    ```
 
-   Espere o `runserver`. O container aplica as migrations e o seed sozinho. API: [http://localhost:8000](http://localhost:8000). Admin: [http://localhost:8000/admin/](http://localhost:8000/admin/).
+   Espere o `runserver`. O container aplica as migrations e o seed sozinho. API: [http://localhost:8000](http://localhost:8000). Docs: [http://localhost:8000/api/docs/](http://localhost:8000/api/docs/). Admin: [http://localhost:8000/admin/](http://localhost:8000/admin/).
 
 3. Em **outro** terminal, o React:
 
@@ -88,6 +98,8 @@ O campo de login aceita **username ou e-mail**.
 ## API
 
 Prefixo: `/api/v1/`. Rotas autenticadas (exceto o token) exigem `Authorization: Bearer <access>`.
+
+Lista e teste (Try it out) no browser: [http://localhost:8000/api/docs/](http://localhost:8000/api/docs/).
 
 - `POST /auth/token/` — `{ "login", "password" }`
 - `POST /auth/token/refresh/` — `{ "refresh" }`
