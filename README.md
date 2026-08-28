@@ -1,88 +1,109 @@
 # Hotel — gestão de hóspedes
 
-Aplicação do desafio fullstack: Django + DRF + PostgreSQL no backend e React no frontend.
+Django + DRF + PostgreSQL e React (Vite). Recepção: hóspedes, reservas, check-in, check-out e conta.
 
-## O que o sistema faz
+## Como rodar
 
-- Login do atendente (JWT)
-- Cadastro e busca de hóspedes (nome, documento, telefone)
-- Lista de hóspedes no hotel e de quem tem reserva sem check-in
-- Reservas, check-in e checkout
-- Cálculo da conta: diária, estacionamento e taxa de checkout após 12h
+Precisa de **Docker** (API + Postgres) e **Node.js 18+** (React).
 
-## Requisitos
+### Opção 1 - "automático" (script c/ comando único)
 
-- Docker e Docker Compose
-- Node.js 18+ (só para o frontend)
-
-## Backend
+Na raiz do repositório:
 
 ```bash
-cd backend
-cp .env.example .env   # só se ainda não existir .env
-docker compose up --build
+chmod +x run.sh
+./run.sh
 ```
 
-O `web` só sobe depois do Postgres aceitar conexão (`healthcheck`). Na subida o entrypoint roda `migrate` e `seed_demo`.
-
-API em `http://localhost:8000`.
-
-Contas (username **ou** e-mail, senha `123`):
-
-| Quem | Login | Onde |
-|---|---|---|
-| Atendente | `atendente` / `atendente@exemplo.com` | app em `http://localhost:3000` |
-| Superuser | `superuser` / `superuser@exemplo.com` | Django admin em `http://localhost:8000/admin/` |
-
-Seed:
-
-- Frank Reynolds — no hotel, **com** carro
-- Charlie Kelly — no hotel, **sem** carro
-- Ronald "Mac" McDonald — reserva pendente de check-in
-- Dennis Reynolds e Dee Reynolds — só ficha, sem reserva
-
-Exemplos:
-
-- `POST /api/v1/auth/token/` — `{ "login", "password" }` (login aceita username **ou** e-mail)
-- `GET /api/v1/guests/?search=charlie`
-- `GET /api/v1/guests/?status=checked_in`
-- `GET /api/v1/guests/?status=reserved`
-- `GET /api/v1/guests/?status=checked_out`
-- `POST /api/v1/reservations/`
-- `POST /api/v1/reservations/{id}/check-in/`
-- `POST /api/v1/reservations/{id}/check-out/`
-
-### Testes do backend
+Sobe o Postgres e a API em background, espera o migrate/seed, instala o front se precisar e abre o Vite. Ctrl+C para o React; a API continua no Docker.
 
 ```bash
-cd backend
-docker compose run --rm --no-deps web pytest
+docker compose -f backend/docker-compose.yml down
 ```
 
-## Frontend
+Browser: [http://localhost:3000](http://localhost:3000) — `atendente` / `123`.
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+### Opção 2 - manual (2 terminais, back e front)
 
-Abre `http://localhost:3000`. Entre com `atendente` / `123`. Admin: `http://localhost:8000/admin/` com `superuser` / `123`.
+1. Copie o env (só na primeira vez):
 
-### Testes do frontend
+   ```bash
+   cp backend/.env.example backend/.env
+   ```
 
-```bash
-cd frontend
-npm test
-```
+2. Suba a API e o banco:
+
+   ```bash
+   cd backend
+   docker compose up --build
+   ```
+
+   Espere o `runserver`. O container aplica as migrations e o seed sozinho. API: [http://localhost:8000](http://localhost:8000). Admin: [http://localhost:8000/admin/](http://localhost:8000/admin/).
+
+3. Em **outro** terminal, o React:
+
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+
+4. Abra [http://localhost:3000](http://localhost:3000) e entre com `atendente` / `123`.
+
+### Contas (senha `123`)
+
+O campo de login aceita **username ou e-mail**.
+
+| Papel | Username | E-mail | Onde |
+|---|---|---|---|
+| Atendente | `atendente` | `atendente@exemplo.com` | app |
+| Superuser | `superuser` | `superuser@exemplo.com` | Django admin |
+
+### Seed
+
+| Hóspede | Situação |
+|---|---|
+| Frank Reynolds | Hospedado, **com** carro |
+| Charlie Kelly | Hospedado, **sem** carro |
+| Ronald "Mac" McDonald | Reservado (pendente de check-in) |
+| Dennis Reynolds, Dee Reynolds | Só ficha, sem reserva |
+
+## API
+
+Prefixo: `/api/v1/`. Rotas autenticadas (exceto o token) exigem `Authorization: Bearer <access>`.
+
+- `POST /auth/token/` — `{ "login", "password" }`
+- `POST /auth/token/refresh/` — `{ "refresh" }`
+- `GET /guests/?search=` — nome, documento ou telefone
+- `GET /guests/?status=` — `reserved` \| `checked_in` \| `checked_out`
+- `POST /guests/`
+- `GET /reservations/`
+- `POST /reservations/`
+- `POST /reservations/{id}/check-in/`
+- `POST /reservations/{id}/check-out/`
 
 ## Regras de preço
 
 | Item | Dia útil | Fim de semana |
 |---|---|---|
 | Diária | R$ 120 | R$ 180 |
-| Vaga de carro | R$ 15 | R$ 20 |
+| Vaga | R$ 15 | R$ 20 |
 
-Check-in a partir das 14h: se for antes, o sistema registra e mostra um alerta.
+Check-in a partir das 14h: se for antes, o sistema **registra** e devolve um alerta (não bloqueia).
 
-Checkout até 12h: depois disso, +50% da diária daquele dia.
+Check-out até 12h: depois disso, +50% da **diária daquele dia**. A conta detalhada vem no check-out.
+
+## Testes
+
+Com a stack do Docker já buildada:
+
+```bash
+docker compose -f backend/docker-compose.yml run --rm --no-deps web pytest
+```
+
+```bash
+cd frontend
+npm test
+```
+
+O `pytest` nesse comando usa SQLite (`--no-deps` não sobe o Postgres). O `docker compose up` continua no PostgreSQL.
