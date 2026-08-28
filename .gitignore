@@ -7,31 +7,30 @@ dist/
 build/
 .Python
 
-# Testes (pytest / coverage) — o desafio pede testes no backend
+# Testes
 .pytest_cache/
 .coverage
 .coverage.*
 htmlcov/
 coverage.xml
 
-# Ambiente local — venv não entra no git; deps estão no requirements.txt
+# Ambiente local
 .env
 .venv/
 venv/
 env/
 
-# Django / DRF
+# Django
 *.log
 db.sqlite3
 *.sqlite3
-media/          # uploads locais (fotos de hóspede etc., se tiver)
-staticfiles/    # saída do collectstatic, não o código em static/
+media/
+staticfiles/
 
-# Node / React (Vite gera dist/; Next geraria .next/)
+# Node
 node_modules/
 dist/
 build/
-.next/
 *.local
 npm-debug.log*
 

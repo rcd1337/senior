@@ -1,0 +1,9 @@
+# 5.2 é LTS; pin no patch, sem pular para 6.x.
+Django==5.2.17
+djangorestframework==3.18.0
+# Wheel com libpq — não precisa gcc/libpq-dev na imagem slim.
+psycopg[binary]>=3.2,<4
+djangorestframework-simplejwt==5.5.1
+django-cors-headers==4.9.0
+pytest>=8.3,<9
+pytest-django>=4.11,<5
