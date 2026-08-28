@@ -2,13 +2,30 @@
 
 Django + DRF + PostgreSQL e React (Vite). Recepção: hóspedes, reservas, check-in, check-out e conta.
 
-## Como rodar
+## Tecnologias
 
-Precisa de **Docker** (API + Postgres) e **Node.js 18+** (React).
+- Python 3.12 e Django 5.2 (LTS)
+- Django REST framework
+- PostgreSQL 16
+- Docker
+- JWT
+- Node.js, npm e React 19 (Vite)
+
+## Pré-requisitos
+
+- Docker e Docker Compose
+- Node.js 18+ e npm
+
+## Inicialização
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/rcd1337/senior.git
+cd senior
+```
 
 ### Opção 1 - "automático" (script c/ comando único)
-
-Na raiz do repositório:
 
 ```bash
 chmod +x run.sh
