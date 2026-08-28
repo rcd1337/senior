@@ -61,7 +61,7 @@ Browser: [http://localhost:3000](http://localhost:3000) — `atendente` / `123`.
 
    ```bash
    cd frontend
-   npm install
+   npm install --userconfig ./.npmrc --registry https://registry.npmjs.org/
    npm run dev
    ```
 

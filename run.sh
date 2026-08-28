@@ -28,7 +28,9 @@ fi
 
 cd frontend
 if [ ! -d node_modules ]; then
-  npm install
+  # --userconfig aponta para o .npmrc do projeto para o ~/.npmrc da máquina não
+  # redirecionar o install para outro registry.
+  npm install --userconfig ./.npmrc --registry https://registry.npmjs.org/
 fi
 
 echo "App: http://localhost:3000  (atendente / 123)"
