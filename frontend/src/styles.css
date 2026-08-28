@@ -1,0 +1,103 @@
+:root {
+  font-family: system-ui, sans-serif;
+  color: #1b1b1b;
+  background: #f4f1ea;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+input,
+select,
+button {
+  padding: 8px 10px;
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+ul {
+  padding-left: 18px;
+}
+
+.reservations {
+  list-style: none;
+  padding: 0;
+}
+
+.reservations li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.error {
+  color: #a40000;
+}
+
+.warn {
+  background: #fff3cd;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.bill table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bill th,
+.bill td {
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  padding: 6px;
+}
+
+.total {
+  font-size: 1.1rem;
+}
+
+.check {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
